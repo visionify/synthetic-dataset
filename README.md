@@ -1,4 +1,4 @@
-# Synthetic dataset Generate
+# Synthetic Dataset Generate
 
 This repo generates the sythetic dataset from the sessions image folder created by download_sessions.py from the oosdetection-edge repo.
 
