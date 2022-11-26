@@ -1,5 +1,7 @@
 # synthetic-dataset
 
+This repo generates the sythetic dataset from the sessions image folder created by download_sessions.py from the oosdetection-edge repo.
+
 ## Before you run the tracker
 
 1. Clone the repository recursively:
