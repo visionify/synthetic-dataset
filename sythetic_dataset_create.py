@@ -3,7 +3,6 @@ import random
 import shutil
 import cv2
 from tqdm import tqdm
-from matplotlib import pyplot as plt
 import cv2, os, sys
 import numpy as np
 import albumentations as A
