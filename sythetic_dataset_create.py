@@ -15,7 +15,7 @@ ROOT = FILE.parents[0]  # az2yolo root directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
-class albem():
+class album():
     def __init__(self):
         self.class_category = [
         'bad_angle', 
@@ -290,7 +290,7 @@ class albem():
         self.crawl_images(self.session_folder_name)
 
 if __name__ == '__main__':
-    albem = albem()
-    opt = albem.parse_opt()
-    albem.main(opt)
+    album = album()
+    opt = album.parse_opt()
+    album.main(opt)
     
