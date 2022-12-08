@@ -2,20 +2,27 @@
 
 This repo generates the sythetic dataset from the sessions image folder created by download_sessions.py from the oosdetection-edge repo.
 
-## Before you run the tracker
+## Steps to create synthetic dataset
 
-1. Clone the repository recursively:
+* Clone the repository recursively:
 
 `git clone https://github.com/visionify/synthetic-dataset.git`
 
-2. Make sure that you fulfill all the requirements: Python 3.8 or later with all [requirements.txt], including albementation. To install, run:
+`cd synthetic-dataset/`
 
-`pip install -r requirements.txt`
+* Make sure that you fulfill all the requirements: Python 3.8 or later with all [requirements.txt], including albumentation. 
+To install, run:
 
-3. To generate the synthtic dataset use:
+`python3 -m pip install -r requirements.txt`
 
-`python sythetic_dataset_create.py --dataset-folder store-dataset --session-images oos-test-images`
+* To generate the synthtic dataset use:
 
-4. To split the dataset use:
+`python3 synthetic_dataset_create.py --dataset-folder synthetic-dataset --session-images <path/to/your/oos-test-images-folder>`
 
-`python split_dataset.py --dataset-folder store-dataset --splitted-dataset new-splitted-dataset`
+* To split the dataset use:
+
+`python split_dataset.py --dataset-folder synthetic-dataset --splitted-dataset splitted-synthetic-dataset`
+
+Your sythetic dataset for resnet-18 classification training is saved at:
+
+`synthetic-dataset/splitted-sythetic-dataset/`

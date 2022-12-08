@@ -8,6 +8,7 @@ import numpy as np
 import albumentations as A
 from pathlib import Path
 import argparse
+import logging as log
 rand_list = ['True', 'False']
 
 FILE = Path(__file__).resolve()
@@ -66,6 +67,7 @@ class album():
         input : dataset path
         '''
         dir_folder = os.getcwd()
+        # save_dataset_folder = '/synthetic-dataset'
         path = os.path.join(dir_folder, save_dataset_folder)
         if os.path.exists(path):
             shutil.rmtree(save_dataset_folder, ignore_errors=True)
@@ -78,11 +80,14 @@ class album():
         input : image path, image object, folder name
         output : store the image
         '''
-        store_id = img_path.split('\\')[1]
-        session_id =  img_path.split('\\')[2]
-        pose_name = img_path.split('\\')[3]
-        image_save_path = os.path.join(self.save_dataset_folder, class_name) + '\\' + store_id + '_' + session_id + '_' + pose_name + '.jpg'
+       
+        store_id = img_path.split('/')[-3]
+        session_id =  img_path.split('/')[-2]
+        pose_name = img_path.split('/')[-1]
+        image_save_path = os.path.join(self.save_dataset_folder, class_name) + '/' + store_id + '_' + session_id + '_' + pose_name
         # print(image_save_path)
+        log.info("==========================")
+        log.info("IMG_PATH".format(img_path, image, class_name))
         cv2.imwrite(image_save_path, image)
 
     def crawl_images(self, folder_name):
@@ -122,8 +127,9 @@ class album():
         '''
         image = cv2.imread(image_path)
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        transform = A.Compose([A.Spatter (mean=0.35, std=0.3, gauss_sigma=3, cutout_threshold=0.38, intensity=0.3, mode='rain'),
-        A.RandomRain (drop_width=1, blur_value=5)])
+        transform = A.Compose([
+            A.Spatter(mean=0.35, std=0.3, gauss_sigma=3, cutout_threshold=0.38, intensity=0.3, mode='rain'),
+            A.RandomRain (drop_width=1, blur_value=5)])
         random.seed(7)
         augmented_image = transform(image=image)['image']
         self.store_image(image_path, augmented_image, 'soiled_camera')
@@ -150,15 +156,16 @@ class album():
         output : store bad image
         '''
         image = cv2.imread(image_path)
+        # print(image_path)
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         transform = A.Compose([
-            A.Defocus(radius=(5,10)),
+            A.Defocus(radius=(3,10)),
             # actual blurry y value is changing resultseg. 15 is very blurry
             # A.GlassBlur (sigma=0.7, max_delta=2, iterations=3),
             # like behind the glass
             # A.MedianBlur (blur_limit=11),
             # nothing happening
-            # A.MotionBlur (blur_limit=1001, allow_shifted = True),
+            # A.MotionBlur (blur_limit=201, allow_shifted = True),
             # nothing visible
             # A.ZoomBlur (max_factor=1.31, step_factor=(0.01, 0.03)),
             # zoomed in center and noisy
@@ -268,11 +275,11 @@ class album():
         self.blurry(img)
         self.randomcrop(img)
         self.bad_angle(img)
-        self.blend(img)
+        # self.blend(img)
 
     def parse_opt(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('--dataset-folder', default= 'class_dataset', type=str, help='Path to output datset folder')
+        parser.add_argument('--dataset-folder', default= 'class-dataset', type=str, help='Path to store the generated synthetic dataset folder')
         parser.add_argument('--session-images', type=str, help='path to the sessions images')
         parser.add_argument('--pose', type=str, default=['top.jpg', 'middle.jpg', 'bottom.jpg'], help='type of image poses')
         opt = parser.parse_args()
